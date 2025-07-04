@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Watsonx Code Explainer</title>
+</head>
+<body>
+  <h2>Enter Python Code</h2>
+  <textarea id="codeInput" rows="10" cols="60" placeholder="Paste Python code here..."></textarea>
+  <br><br>
+  <button onclick="explainCode()">Explain Code</button>
+  <h3>Explanation:</h3>
+  <pre id="output"></pre>
+
+  <script>
+    async function explainCode() {
+      const code = document.getElementById("codeInput").value;
+
+      const response = await fetch("http://localhost:5000/explain", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ code: code })
+      });
+
+      const result = await response.json();
+      console.log("DEBUG: Response from Flask / Watsonx:", result);  // ✅ Debug line added
+      console.log(result); // in JS 
+      const explanation = result.results?.[0]?.generated_text || "No explanation found.";
+      document.getElementById("output").textContent = explanation;
+    }
+  </script>
+
+</body>
+</html>
