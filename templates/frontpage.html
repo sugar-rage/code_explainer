@@ -2,34 +2,264 @@
 <html>
 <head>
   <title>Watsonx Code Explainer</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+      color: #333;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      overflow: hidden;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+      padding: 30px;
+      text-align: center;
+      color: white;
+    }
+
+    .header h1 {
+      font-size: 2.5em;
+      font-weight: 300;
+      margin-bottom: 10px;
+    }
+
+    .header p {
+      opacity: 0.9;
+      font-size: 1.1em;
+    }
+
+    .content {
+      padding: 40px;
+    }
+
+    .input-section {
+      margin-bottom: 30px;
+    }
+
+    .input-section h2 {
+      color: #2c3e50;
+      margin-bottom: 15px;
+      font-size: 1.4em;
+      font-weight: 600;
+    }
+
+    #codeInput {
+      width: 100%;
+      padding: 15px;
+      font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+      font-size: 14px;
+      border: 2px solid #e0e6ed;
+      border-radius: 8px;
+      resize: vertical;
+      min-height: 200px;
+      line-height: 1.6;
+      background: #f8f9fa;
+      transition: border-color 0.3s ease;
+    }
+
+    #codeInput:focus {
+      outline: none;
+      border-color: #4facfe;
+      box-shadow: 0 0 0 3px rgba(79, 172, 254, 0.1);
+    }
+
+    .button-container {
+      text-align: center;
+      margin: 30px 0;
+    }
+
+    .explain-btn {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      padding: 15px 40px;
+      font-size: 16px;
+      font-weight: 600;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+    }
+
+    .explain-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+    }
+
+    .explain-btn:active {
+      transform: translateY(0);
+    }
+
+    .output-section {
+      margin-top: 30px;
+    }
+
+    .output-section h3 {
+      color: #2c3e50;
+      margin-bottom: 15px;
+      font-size: 1.4em;
+      font-weight: 600;
+    }
+
+    #output {
+      background: #f8f9fa;
+      border: 2px solid #e0e6ed;
+      border-radius: 8px;
+      padding: 20px;
+      font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+      font-size: 14px;
+      line-height: 1.6;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      min-height: 100px;
+      max-height: 400px;
+      overflow-y: auto;
+      color: #2c3e50;
+    }
+
+    .loading {
+      color: #667eea;
+      font-style: italic;
+    }
+
+    .error {
+      color: #e74c3c;
+      background: #fdf2f2;
+      border-color: #fecaca;
+    }
+
+    /* Responsive design */
+    @media (max-width: 768px) {
+      .container {
+        margin: 10px;
+        border-radius: 8px;
+      }
+      
+      .header {
+        padding: 20px;
+      }
+      
+      .header h1 {
+        font-size: 2em;
+      }
+      
+      .content {
+        padding: 20px;
+      }
+      
+      #codeInput {
+        font-size: 12px;
+        min-height: 150px;
+      }
+      
+      .explain-btn {
+        padding: 12px 30px;
+        font-size: 14px;
+      }
+    }
+
+    /* Print styles for capturing */
+    @media print {
+      body {
+        background: white;
+        padding: 0;
+      }
+      
+      .container {
+        box-shadow: none;
+        border: 1px solid #ddd;
+      }
+      
+      .header {
+        background: #f0f0f0 !important;
+        color: #333 !important;
+      }
+      
+      .explain-btn {
+        background: #666 !important;
+        color: white !important;
+      }
+    }
+  </style>
 </head>
 <body>
-  <h2>Enter Python Code</h2>
-  <textarea id="codeInput" rows="10" cols="60" placeholder="Paste Python code here..."></textarea>
-  <br><br>
-  <button onclick="explainCode()">Explain Code</button>
-  <h3>Explanation:</h3>
-  <pre id="output"></pre>
+  <div class="container">
+    <div class="header">
+      <h1>Watsonx Code Explainer</h1>
+      <p>AI-powered Python code analysis and explanation</p>
+    </div>
+    
+    <div class="content">
+      <div class="input-section">
+        <h2>Enter Python Code</h2>
+        <textarea id="codeInput" placeholder="Paste your Python code here and click 'Explain Code' to get an AI-powered explanation..."></textarea>
+      </div>
+      
+      <div class="button-container">
+        <button class="explain-btn" onclick="explainCode()">Explain Code</button>
+      </div>
+      
+      <div class="output-section">
+        <h3>Explanation:</h3>
+        <pre id="output">Your code explanation will appear here...</pre>
+      </div>
+    </div>
+  </div>
 
   <script>
     async function explainCode() {
       const code = document.getElementById("codeInput").value;
+      const output = document.getElementById("output");
+      
+      if (!code.trim()) {
+        output.textContent = "Please enter some Python code to explain.";
+        output.className = "error";
+        return;
+      }
+      
+      // Show loading state
+      output.textContent = "Analyzing code... Please wait.";
+      output.className = "loading";
 
-      const response = await fetch("http://localhost:5000/explain", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ code: code })
-      });
+      try {
+        const response = await fetch("http://localhost:5000/explain", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ code: code })
+        });
 
-      const result = await response.json();
-      console.log("DEBUG: Response from Flask / Watsonx:", result);  // ✅ Debug line added
-      console.log(result); // in JS
-      const explanation = result.results?.[0]?.generated_text || "No explanation found.";
-      document.getElementById("output").textContent = explanation;
+        const result = await response.json();
+        console.log("DEBUG: Response from Flask / Watsonx:", result);
+        console.log(result);
+        
+        const explanation = result.results?.[0]?.generated_text || "No explanation found.";
+        output.textContent = explanation;
+        output.className = "";
+        
+      } catch (error) {
+        console.error("Error:", error);
+        output.textContent = "Error: Unable to connect to the explanation service. Please make sure the server is running.";
+        output.className = "error";
+      }
     }
   </script>
-
 </body>
 </html>
