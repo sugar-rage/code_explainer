@@ -25,7 +25,7 @@
 
       const result = await response.json();
       console.log("DEBUG: Response from Flask / Watsonx:", result);  // ✅ Debug line added
-      console.log(result); // in JS 
+      console.log(result); // in JS
       const explanation = result.results?.[0]?.generated_text || "No explanation found.";
       document.getElementById("output").textContent = explanation;
     }
