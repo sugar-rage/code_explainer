@@ -75,5 +75,10 @@ def explain_code():
         return jsonify({"error": response.text}), response.status_code
 
 if __name__ == "__main__":
-    # Run Flask app in debug mode for easier troubleshooting
-    app.run(port=5000, debug=True)
+    import os
+    from dotenv import load_dotenv
+
+    load_dotenv()  # Load variables from .env
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port, debug=True)
+
