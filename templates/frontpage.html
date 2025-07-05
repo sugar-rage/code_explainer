@@ -476,7 +476,7 @@
       output.className = "loading";
 
       try {
-        const response = await fetch("http://localhost:5000/explain", {
+        const response = await fetch("/explain", {
           method: "POST",
           headers: {
             "Content-Type": "application/json"
