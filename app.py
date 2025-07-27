@@ -3,17 +3,16 @@ import requests
 import os
 from dotenv import load_dotenv
 
-# Load environment variables from .env file
+
 load_dotenv()
 
 app = Flask(__name__)
 
-# Get IBM API key from environment
 API_KEY = os.getenv("IBM_API_KEY")
 if not API_KEY:
     raise Exception("IBM_API_KEY not found. Check your .env file.")
 
-# Watsonx deployed endpoint URL (replace with your actual deployment endpoint)
+
 WATSONX_URL = "https://us-south.ml.cloud.ibm.com/ml/v1/deployments/83cb3407-2dd5-4dbe-b01d-05dd24251ff4/text/generation?version=2021-05-01"
 
 @app.route("/")
@@ -49,7 +48,6 @@ def explain_code():
         "Content-Type": "application/json"
     }
 
-    # This must match your Watsonx prompt template variable name!
     payload = {
     "parameters": {
         "prompt_variables": {
@@ -71,7 +69,6 @@ def explain_code():
         explanation = result.get("results", [{}])[0].get("generated_text", "No explanation generated.")
         return jsonify({"results": [{"generated_text": explanation}]})
     else:
-        # Return the error message for debugging
         return jsonify({"error": response.text}), response.status_code
 
 if __name__ == "__main__":
